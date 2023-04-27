@@ -32,9 +32,11 @@ public class FindSlowTestExtension implements BeforeTestExecutionCallback, After
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
         /*리플렉션*/
+        //현재 실행중인 테스트 메소드를 나타내는 Method 객체를 가져온다.
         Method requiredTestMethod = context.getRequiredTestMethod();
+        //현재 실행중인 테스트 메소드에 @SlowTest가 있는가?
         SlowTest annotation = requiredTestMethod.getAnnotation(SlowTest.class);
-
+        //-> @SlowTest가 없으면 null을 반환한다.
 
         String testMethodName = requiredTestMethod.getName();
         ExtensionContext.Store store = getStore(context);
