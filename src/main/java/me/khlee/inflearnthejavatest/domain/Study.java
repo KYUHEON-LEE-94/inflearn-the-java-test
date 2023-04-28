@@ -2,6 +2,8 @@ package me.khlee.inflearnthejavatest.domain;
 
 import me.khlee.inflearnthejavatest.study.StudyStatus;
 
+import java.time.LocalDateTime;
+
 public class Study {
 
     private StudyStatus status =StudyStatus.DRAFT;
@@ -12,6 +14,8 @@ public class Study {
 
     private Member owner;
 
+    private LocalDateTime openDateTime;
+
 
     public Study() {
     }
@@ -19,6 +23,11 @@ public class Study {
     public Study(int limit, String name) {
         this.limit = limit;
         this.name = name;
+    }
+    
+    public  void open(){
+        this.status = StudyStatus.OPEN;
+        this.openDateTime = LocalDateTime.now();
     }
 
     public Study(int limit) {
@@ -54,6 +63,14 @@ public class Study {
 
     public Member getOwner() {
         return owner;
+    }
+
+    public LocalDateTime getOpenDateTime() {
+        return openDateTime;
+    }
+
+    public void setOpenDateTime(LocalDateTime openDateTime) {
+        this.openDateTime = openDateTime;
     }
 
     public void setOwner(Member owner) {

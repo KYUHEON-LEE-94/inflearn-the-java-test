@@ -4,6 +4,7 @@ import me.khlee.inflearnthejavatest.domain.Member;
 import me.khlee.inflearnthejavatest.domain.Study;
 import me.khlee.inflearnthejavatest.member.MemberNotFoundException;
 import me.khlee.inflearnthejavatest.member.MemberService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -82,5 +83,22 @@ public class StudyServiceTest {
         assertEquals(member, study.getOwner());
         then(memberService).should(times(1)).notify(study);
         then(memberService).shouldHaveNoMoreInteractions();
+    }
+
+    @DisplayName("다른 사용자가 볼 수 있도록 스터디를 공개한다.")
+    @Test
+    void openStudy(@Mock MemberService memberService,
+                   @Mock StudyRepository studyRepository){
+
+        StudyService studyService = new StudyService(memberService,studyRepository);
+        Study study = new Study(10,"더 자바 테스트");
+
+        given(studyRepository.save(study)).willReturn(study);
+
+        studyService.openStudy(study);
+
+        assertEquals(StudyStatus.OPEN,study.getStatus());
+        assertNotNull(study.getOpenDateTime());
+        then(memberService).should().notify(study);
     }
 }
