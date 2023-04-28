@@ -39,6 +39,19 @@
                 </exclusion>
             </exclusions>-->
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>1.15.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!--해당 DB의 컨테이너를 띄울 수 있는 의존성-->
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>1.15.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
