@@ -18,6 +18,12 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -45,12 +51,31 @@
             <version>1.15.1</version>
             <scope>test</scope>
         </dependency>
+        <!--  ArchUnit      -->
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-engine</artifactId>
+            <version>0.12.0</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <!--해당 DB의 컨테이너를 띄울 수 있는 의존성-->
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
             <version>1.15.1</version>
             <scope>test</scope>
+        </dependency>
+        <!--카오스 몽키-->
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>chaos-monkey-spring-boot</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+        <!--실제 운영에 필요한 기능들을 제공하는 모듈-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>3.0.4</version>
         </dependency>
     </dependencies>
 

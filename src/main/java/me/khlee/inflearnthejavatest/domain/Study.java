@@ -1,7 +1,5 @@
 package me.khlee.inflearnthejavatest.domain;
 
-import me.khlee.inflearnthejavatest.study.StudyStatus;
-
 import java.time.LocalDateTime;
 
 public class Study {

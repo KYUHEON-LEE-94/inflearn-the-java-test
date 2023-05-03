@@ -2,29 +2,23 @@ package me.khlee.inflearnthejavatest.study;
 
 import me.khlee.inflearnthejavatest.domain.Member;
 import me.khlee.inflearnthejavatest.domain.Study;
-import me.khlee.inflearnthejavatest.member.MemberNotFoundException;
+import me.khlee.inflearnthejavatest.domain.StudyStatus;
 import me.khlee.inflearnthejavatest.member.MemberService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
-import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.containers.output.Slf4jLogConsumer;
-import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import javax.swing.text.html.Option;
-
+import java.io.File;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,37 +40,17 @@ public class StudyServiceTest {
     MemberService memberService;
     @Autowired
     StudyRepository studyRepository;
+    @Value("${container.port}")
+    int port;
 
-    @Container
-    //특정 DB에 특정 설정을 하는 방법
-    private static GenericContainer postgreSQLContainer = new GenericContainer("postgres")
-            .withExposedPorts(5432)
-            .withEnv("POSTGRES_DB", "studytest")
-            //특정 http Path를 기다리는 방법
-            .waitingFor(Wait.forHttp("/hello"));
-
-    @BeforeAll
-    static  void  beforeAll(){
-        Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(logger);
-        postgreSQLContainer.followOutput(logConsumer);
-    }
-
-    //testDB에 쌓이더라도 충돌을 최대한 줄이는 방법
-    @BeforeEach
-    void beforeEach() {
-        System.out.println("=====");
-        //랜덤하게 매핑된 포트를 참조하는 방법
-        System.out.println(postgreSQLContainer.getMappedPort(5432));
-        System.out.println(postgreSQLContainer.getLogs());
-        studyRepository.deleteAll();
-
-    }
+    /*docker compost 사용법*/
+    @Container 
+    static DockerComposeContainer dockerComposeContainer = new DockerComposeContainer(new File("src/test/resources/docker-compose.yml"));
 
 
     @Test
     void createNewStudy(@Mock MemberService memberService,
-                        @Mock StudyRepository studyRepository) throws MemberNotFoundException {
-
+                        @Mock StudyRepository studyRepository) {
 
         StudyService studyService = new StudyService(memberService, studyRepository);
         assertNotNull(studyService);
@@ -107,7 +81,7 @@ public class StudyServiceTest {
 
     @Test
     void createNewStudy2(@Mock MemberService memberService,
-                         @Mock StudyRepository studyRepository) throws MemberNotFoundException {
+                         @Mock StudyRepository studyRepository) {
         //Given
         StudyService studyService = new StudyService(memberService, studyRepository);
         Study study = new Study(10, "테스트");
@@ -144,4 +118,5 @@ public class StudyServiceTest {
         assertNotNull(study.getOpenDateTime());
         then(memberService).should().notify(study);
     }
+
 }

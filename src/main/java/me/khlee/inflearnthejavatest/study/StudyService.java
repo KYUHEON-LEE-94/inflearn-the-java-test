@@ -2,10 +2,8 @@ package me.khlee.inflearnthejavatest.study;
 
 import me.khlee.inflearnthejavatest.domain.Member;
 import me.khlee.inflearnthejavatest.domain.Study;
-import me.khlee.inflearnthejavatest.member.MemberNotFoundException;
 import me.khlee.inflearnthejavatest.member.MemberService;
 
-import javax.swing.text.Style;
 import java.util.Optional;
 
 public class StudyService {
@@ -22,7 +20,7 @@ public class StudyService {
         this.repository = repository;
     }
 
-    public Study createNewStudy(Long memberId, Study study) throws MemberNotFoundException {
+    public Study createNewStudy(Long memberId, Study study) {
         Optional<Member> member = memberService.findById(memberId);
         study.setOwner(member.orElseThrow(()-> new IllegalArgumentException("Member doesn't exist for id: ")));
         Study newStudy = repository.save(study);
